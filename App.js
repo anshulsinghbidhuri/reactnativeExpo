@@ -1,7 +1,9 @@
 // npm run android
+import 'react-native-gesture-handler';
 import React from "react";
 import { View,Text,SafeAreaView,StyleSheet,FlatList } from "react-native"; 
 import ColorBox from './components/ColorBox';
+import { NavigationContainer } from "@react-navigation/native";
 const COLORS = [
   { colorName: 'Base03', hexCode: '#002b36' },
   { colorName: 'Base02', hexCode: '#073642' },
@@ -22,33 +24,9 @@ const COLORS = [
 ];
 const App =() => {
   return (
-//     <SafeAreaView style={{flex:1}}>
-//       <View style={[style.container,style.pink]}>
-//         <Text>Hello World</Text>
-//         </View>
-//     </SafeAreaView>
-//   );
-// };
-// const style = StyleSheet.create({
-//   container:{
-//     flex:1,
-//     justifyContent:'center',
-//     alignItems:'center'
-//   },
-//   pink:{
-//     backgroundColor:'pink'
-//   }
-// });
+    <NavigationContainer>
 <SafeAreaView>
-      {/* <View style={styles.container}>
-        <Text style={styles.heading}>
-          Here are some boxes of different colours
-        </Text>
-        <ColorBox colorName="Cyan" hexCode="#2aa198"/>
-        <ColorBox colorName="Bule" hexCode="#268bd2"/>
-        <ColorBox colorName="Magenta" hexCode="#d33682"/>
-        <ColorBox colorName="Orange" hexCode="#cb4b16"/>
-      </View> */}
+     
       <FlatList
       style={styles.container}
       data={COLORS}
@@ -59,6 +37,8 @@ const App =() => {
       ListHeaderComponent={<Text style={styles.heading}>Solarized</Text>}
       />     
     </SafeAreaView>
+    </NavigationContainer>
+
   );
 };
 

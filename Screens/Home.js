@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect,useState } from 'react';
-import PalettePreview from '../components/PalettePreview';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   StyleSheet,
   FlatList,
@@ -7,27 +6,39 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-const URL='https://color-palette-api.kadikraman.now.sh/palettes';
-const Home = ({ navigation }) => {
-  const [palettes,setPaettes]=useState([]);
-  const [isResfreshing,setIsRefreshing]=useState(false);
-const handleFetchPalettes=useCallback(async()=>{
-  const result=await fetch(URL);
-  if(result.ok){
-    const palettes=await result.json();
-    setPaettes(palettes);
-  }
-},[]);
-useEffect(()=>{
-  handleFetchPalettes();
-},[]);
-const handleRefresh=useCallback(async()=>{
-  setIsRefreshing(true);
-  await handleFetchPalettes();
-  setTimeout(()=>{
-  setIsRefreshing(false);
-},1000);
-});
+import PalettePreview from '../components/PalettePreview';
+
+const URL = 'https://color-palette-api.kadikraman.now.sh/palettes';
+
+const Home = ({ navigation, route }) => {
+  const newPalette = route.params ? route.params.newPalette : null;
+  const [palettes, setPalettes] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const handleFetchPalettes = useCallback(async () => {
+    const response = await fetch(URL);
+    if (response.ok) {
+      const palettes = await response.json();
+      setPalettes(palettes);
+    }
+  }, []);
+  useEffect(() => {
+    handleFetchPalettes();
+  }, []);
+  const handleRefresh = useCallback(async () => {
+    setIsRefreshing(true);
+    await handleFetchPalettes();
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 1000);
+  });
+
+  useEffect(() => {
+    if (newPalette) {
+      setPalettes(current => [newPalette, ...current]);
+    }
+  }, [newPalette]);
+
   return (
     <>
       <TouchableOpacity
@@ -47,13 +58,12 @@ const handleRefresh=useCallback(async()=>{
           />
         )}
         refreshControl={
-          <RefreshControl refreshing={isResfreshing} onRefresh={handleRefresh} />
+          <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
         }
       />
     </>
   );
 };
-
 const styles = StyleSheet.create({
   list: {
     flex: 1,
